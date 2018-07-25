@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#09387F"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/lbl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textColor="#fff"
+        android:textSize="22sp"
+        android:text="Bienvenido,
+Seleccióne imagenes de la galeria o tomelas desde la camara"/>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardImages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lbl"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_camera"/>
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_action_name"/>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:id="@+id/lbl2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textColor="#fff"
+        android:textSize="22sp"
+        android:layout_below="@+id/cardImages"
+        android:text="Imagenes Cargadas:"/>
+
+    <HorizontalScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lbl2">
+
+        <LinearLayout
+            android:id="@+id/linearPreviewImages"
+            android:layout_width="wrap_content"
+            android:layout_height="180sp"
+            android:orientation="horizontal"
+            android:background="#2F4F7F">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardPrev1"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:layout_width="250dp"
+                android:layout_height="160dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="8dp"
+                android:layout_margin="10dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/imgPrev1"
+                        android:layout_width="250dp"
+                        android:layout_height="120dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="5dp"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/vegetta" />
+
+                    <ImageView
+                        android:id="@+id/imgPrevSupr1"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="10sp"
+                        android:src="@mipmap/ic_delete"
+                        android:layout_alignParentRight="true"/>
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardPrev2"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:layout_width="250dp"
+                android:layout_height="160dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="8dp"
+                android:layout_margin="10dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/imgPrev2"
+                        android:layout_width="250dp"
+                        android:layout_height="120dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="5dp"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/vegetta" />
+
+                    <ImageView
+                        android:id="@+id/imgPrevSupr2"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="10sp"
+                        android:src="@mipmap/ic_delete"
+                        android:layout_alignParentRight="true"/>
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardPrev3"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:layout_width="250dp"
+                android:layout_height="160dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="8dp"
+                android:layout_margin="10dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/imgPrev3"
+                        android:layout_width="250dp"
+                        android:layout_height="120dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="5dp"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/vegetta" />
+
+                    <ImageView
+                        android:id="@+id/imgPrevSupr3"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="10sp"
+                        android:src="@mipmap/ic_delete"
+                        android:layout_alignParentRight="true"/>
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <Button
+        android:id="@+id/btnUpload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_below="@+id/scrollView"
+        android:background="#0E5ACC"
+        android:textColor="#fff"
+        android:text="SUBIR IMAGENES"/>
+
+    <ImageView
+        android:id="@+id/imgPreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:elevation="10dp"/>
+
+</RelativeLayout>
