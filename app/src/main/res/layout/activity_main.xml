@@ -32,17 +32,21 @@ Seleccióne imagenes de la galeria o tomelas desde la camara"/>
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/btnCamera"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_weight="1"
                 android:layout_margin="10dp"
+                android:onClick="btnCameraClick"
                 android:src="@drawable/ic_camera"/>
 
             <ImageView
+                android:id="@+id/btnFolder"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_weight="1"
                 android:layout_margin="10dp"
+                android:onClick="btnGalleryClick"
                 android:src="@drawable/ic_action_name"/>
 
         </LinearLayout>
@@ -110,6 +114,14 @@ Seleccióne imagenes de la galeria o tomelas desde la camara"/>
                         android:src="@mipmap/ic_delete"
                         android:layout_alignParentRight="true"/>
 
+                    <ImageView
+                        android:id="@+id/imgPrevZoom1"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="10sp"
+                        android:src="@mipmap/ic_show_image"
+                        android:layout_alignParentLeft="true"/>
+
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
 
@@ -150,6 +162,14 @@ Seleccióne imagenes de la galeria o tomelas desde la camara"/>
                         android:layout_margin="10sp"
                         android:src="@mipmap/ic_delete"
                         android:layout_alignParentRight="true"/>
+
+                    <ImageView
+                        android:id="@+id/imgPrevZoom2"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="10sp"
+                        android:src="@mipmap/ic_show_image"
+                        android:layout_alignParentLeft="true"/>
 
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
@@ -192,6 +212,14 @@ Seleccióne imagenes de la galeria o tomelas desde la camara"/>
                         android:src="@mipmap/ic_delete"
                         android:layout_alignParentRight="true"/>
 
+                    <ImageView
+                        android:id="@+id/imgPrevZoom3"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="10sp"
+                        android:src="@mipmap/ic_show_image"
+                        android:layout_alignParentLeft="true"/>
+
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
 
@@ -215,5 +243,14 @@ Seleccióne imagenes de la galeria o tomelas desde la camara"/>
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:elevation="10dp"/>
+
+    <ImageView
+        android:id="@+id/imgClosePrev"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="10sp"
+        android:src="@mipmap/ic_delete"
+        android:elevation="11dp"
+        android:layout_alignParentRight="true"/>
 
 </RelativeLayout>

@@ -73,7 +73,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_clear_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_zoom_in_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -84,7 +84,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="iconShape" value="CIRCLE" />
-                                      <entry key="outputName" value="ic_delete" />
+                                      <entry key="outputName" value="ic_show_image" />
                                     </map>
                                   </option>
                                 </PersistentState>
