@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -25,8 +27,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.alan_.gallerypreviewandupload.model.Utility;
 import com.example.alan_.gallerypreviewandupload.model.VolleyAppController;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,9 +55,10 @@ public class MainActivity extends AppCompatActivity {
     int seconds;
     long startTime = 0;
     final int SELECT_FILE = 1;
-    private final String URL = "http://192.168.43.50/DemoUploadTwoImage/post.php/";
+    private final int REQUEST_CAMERA = 0;
     private Bitmap bitmap1, bitmap2, bitmap3;
-    private ImageView imagePreview;
+    private Uri uriImage1, uriImage2, uriImage3;
+    private StorageReference nStorage1, nStorage2, nStorage3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,20 +97,21 @@ public class MainActivity extends AppCompatActivity {
         card1=false;
         card2=false;
         card3=false;
+        uriImage1=null;
+        uriImage2=null;
+        uriImage3=null;
+
+        nStorage1 = FirebaseStorage.getInstance().getReference();
+        nStorage2 = FirebaseStorage.getInstance().getReference();
+        nStorage3 = FirebaseStorage.getInstance().getReference();
 
         imgPrevZoom1.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    //imgPreview.setImageResource(R.drawable.vegetta);
                     imgPreview.setImageBitmap(bitmap1);
                     imgClosePrev.setVisibility(view.VISIBLE);
-                    /*startTime = System.currentTimeMillis();
-                    timerHandler.postDelayed(timerRunnable, 0);*/
-                }/* else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    imgPreview.setImageResource(0);
-                }*/
-
+                }
                 return true;
             }
         });
@@ -129,8 +140,6 @@ public class MainActivity extends AppCompatActivity {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     imgPreview.setImageBitmap(bitmap2);
                     imgClosePrev.setVisibility(view.VISIBLE);
-                    startTime = System.currentTimeMillis();
-                    timerHandler.postDelayed(timerRunnable, 0);
                 }
                 return true;
             }
@@ -151,8 +160,6 @@ public class MainActivity extends AppCompatActivity {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     imgPreview.setImageBitmap(bitmap3);
                     imgClosePrev.setVisibility(view.VISIBLE);
-                    startTime = System.currentTimeMillis();
-                    timerHandler.postDelayed(timerRunnable, 0);
                 }
                 return true;
             }
@@ -209,7 +216,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void cameraIntent() {
-
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQUEST_CAMERA);
     }
 
     @Override
@@ -245,36 +253,166 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SELECT_FILE)
                 onSelectFromGalleryResult(data);
-            //else if (requestCode == REQUEST_CAMERA)
-                //onCaptureImageResult(data);
+            else if (requestCode == REQUEST_CAMERA)
+                onCaptureImageResult(data);
         }
+    }
+    private void onCaptureImageResult(Intent data) {
+        Bitmap bitmap = null;
+        Uri uriImage = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+            uriImage = data.getData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Bitmap bitmap5 = (Bitmap) data.getExtras().get("data");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap5.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+
+        File destination = new File(Environment.getExternalStorageDirectory(),
+                System.currentTimeMillis() + ".jpg");
+
+        FileOutputStream fo;
+        try {
+            destination.createNewFile();
+            fo = new FileOutputStream(destination);
+            fo.write(bytes.toByteArray());
+            fo.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        imgPrev1.setRotation(90);
+
+        if(card1==false&&card2==false&&card3==false){
+            card1=true;
+            imgPrev1.setImageBitmap(bitmap); //Asignar el bitmap a el ImageView
+            bitmap1=bitmap;
+            cardPrev1.setVisibility(view.VISIBLE);
+            imgPrev1.setVisibility(view.VISIBLE);
+            imgPrevZoom1.setVisibility(view.VISIBLE);
+            imgPrevSupr1.setVisibility(view.VISIBLE);
+            uriImage1=uriImage;
+        }else if(card1==true&&card2==false&&card3==false){
+            card2=true;
+            imgPrev2.setImageBitmap(bitmap);
+            bitmap2=bitmap;
+            cardPrev2.setVisibility(view.VISIBLE);
+            imgPrev2.setVisibility(view.VISIBLE);
+            imgPrevZoom2.setVisibility(view.VISIBLE);
+            imgPrevSupr2.setVisibility(view.VISIBLE);
+            uriImage2=uriImage;
+        }else if(card1==true&&card2==true&&card3==false){
+            card3=true;
+            imgPrev3.setImageBitmap(bitmap);
+            bitmap3=bitmap;
+            cardPrev3.setVisibility(view.VISIBLE);
+            imgPrev3.setVisibility(view.VISIBLE);
+            imgPrevZoom3.setVisibility(view.VISIBLE);
+            imgPrevSupr3.setVisibility(view.VISIBLE);
+            uriImage3=uriImage;
+        }else if(card1==false&&card2==true&&card3==true){
+            card1=true;
+            imgPrev1.setImageBitmap(bitmap);
+            bitmap1=bitmap;
+            cardPrev1.setVisibility(view.VISIBLE);
+            imgPrev1.setVisibility(view.VISIBLE);
+            imgPrevZoom1.setVisibility(view.VISIBLE);
+            imgPrevSupr1.setVisibility(view.VISIBLE);
+            uriImage1=uriImage;
+        }else if(card1==true&&card2==false&&card3==true){
+            card2=true;
+            imgPrev2.setImageBitmap(bitmap);
+            bitmap2=bitmap;
+            cardPrev2.setVisibility(view.VISIBLE);
+            imgPrev2.setVisibility(view.VISIBLE);
+            imgPrevZoom2.setVisibility(view.VISIBLE);
+            imgPrevSupr2.setVisibility(view.VISIBLE);
+            uriImage2=uriImage;
+        }else if(card1==false&&card2==false&&card3==true){
+            card1=true;
+            imgPrev1.setImageBitmap(bitmap);
+            bitmap1=bitmap;
+            cardPrev1.setVisibility(view.VISIBLE);
+            imgPrev1.setVisibility(view.VISIBLE);
+            imgPrevZoom1.setVisibility(view.VISIBLE);
+            imgPrevSupr1.setVisibility(view.VISIBLE);
+            uriImage1=uriImage;
+        }
+        /*BitmapDrawable ob = new BitmapDrawable(getResources(), bitmap2);
+        imagePreview.setBackground(null);
+        imagePreview.setBackground(ob);*/
     }
 
     private void onSelectFromGalleryResult(Intent data) {
         Bitmap bitmap=null;
+        Uri uriImage = null;
         if (data != null) {
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+                uriImage = data.getData();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
-        if(card1==false&&card2==true&&card3==true){
+        if(card1==false&&card2==false&&card3==false){
             card1=true;
             imgPrev1.setImageBitmap(bitmap); //Asignar el bitmap a el ImageView
             bitmap1=bitmap;
             cardPrev1.setVisibility(view.VISIBLE);
-        }else if(card2==false){
+            imgPrev1.setVisibility(view.VISIBLE);
+            imgPrevZoom1.setVisibility(view.VISIBLE);
+            imgPrevSupr1.setVisibility(view.VISIBLE);
+            uriImage1=uriImage;
+        }else if(card1==true&&card2==false&&card3==false){
             card2=true;
-            imgPrev2.setImageBitmap(bitmap); //Asignar el bitmap a el ImageView
+            imgPrev2.setImageBitmap(bitmap);
             bitmap2=bitmap;
             cardPrev2.setVisibility(view.VISIBLE);
-        }else if(card3==false){
+            imgPrev2.setVisibility(view.VISIBLE);
+            imgPrevZoom2.setVisibility(view.VISIBLE);
+            imgPrevSupr2.setVisibility(view.VISIBLE);
+            uriImage2=uriImage;
+        }else if(card1==true&&card2==true&&card3==false){
             card3=true;
-            imgPrev3.setImageBitmap(bitmap); //Asignar el bitmap a el ImageView
+            imgPrev3.setImageBitmap(bitmap);
             bitmap3=bitmap;
             cardPrev3.setVisibility(view.VISIBLE);
+            imgPrev3.setVisibility(view.VISIBLE);
+            imgPrevZoom3.setVisibility(view.VISIBLE);
+            imgPrevSupr3.setVisibility(view.VISIBLE);
+            uriImage3=uriImage;
+        }else if(card1==false&&card2==true&&card3==true){
+            card1=true;
+            imgPrev1.setImageBitmap(bitmap);
+            bitmap1=bitmap;
+            cardPrev1.setVisibility(view.VISIBLE);
+            imgPrev1.setVisibility(view.VISIBLE);
+            imgPrevZoom1.setVisibility(view.VISIBLE);
+            imgPrevSupr1.setVisibility(view.VISIBLE);
+            uriImage1=uriImage;
+        }else if(card1==true&&card2==false&&card3==true){
+            card2=true;
+            imgPrev2.setImageBitmap(bitmap);
+            bitmap2=bitmap;
+            cardPrev2.setVisibility(view.VISIBLE);
+            imgPrev2.setVisibility(view.VISIBLE);
+            imgPrevZoom2.setVisibility(view.VISIBLE);
+            imgPrevSupr2.setVisibility(view.VISIBLE);
+            uriImage3=uriImage;
+        }else if(card1==false&&card2==false&&card3==true){
+            card1=true;
+            imgPrev1.setImageBitmap(bitmap);
+            bitmap1=bitmap;
+            cardPrev1.setVisibility(view.VISIBLE);
+            imgPrev1.setVisibility(view.VISIBLE);
+            imgPrevZoom1.setVisibility(view.VISIBLE);
+            imgPrevSupr1.setVisibility(view.VISIBLE);
+            uriImage1=uriImage;
         }
 
         //BitmapDrawable ob = new BitmapDrawable(getResources(), bitmap);
@@ -288,41 +426,26 @@ public class MainActivity extends AppCompatActivity {
         return Base64.encodeToString(imageBytes, Base64.DEFAULT);
     }
 
-    public void uploadImage() {
-        final String imageBit = getStringImage(bitmap1);
+    public void uploadImage(View view) {
+        StorageReference filepath1=nStorage1.child("images/").child(uriImage1.getLastPathSegment());
+        StorageReference filepath2=nStorage2.child("images/").child(uriImage2.getLastPathSegment());
+        StorageReference filepath3=nStorage3.child("images/").child(uriImage3.getLastPathSegment());
 
-        Log.e("Image One", imageBit);
-        final ProgressDialog pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Guardando información, espere un momento...");
-        pDialog.show();
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                URL,
-                new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-                        pDialog.hide();
-                    }
-
-                }, new Response.ErrorListener() {
-
+        filepath1.putFile(uriImage1).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Error", error.getMessage());
-                pDialog.hide();
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
             }
-
-        }) {
+        });
+        filepath2.putFile(uriImage2).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("getdata", "UploadImage");
-                params.put("insert_image_one", imageBit);
-                return params;
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
             }
-        };
-//Adding request to request queue
-        VolleyAppController.getInstance().addToRequestQueue(stringRequest);
+        });
+        filepath3.putFile(uriImage3).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+            }
+        });
+        Toast.makeText(this, "Imagenes Subidas Correctamente", Toast.LENGTH_SHORT).show();
     }
 }

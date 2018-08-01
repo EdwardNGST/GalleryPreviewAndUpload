@@ -235,6 +235,7 @@ Seleccióne imagenes de la galeria o tomelas desde la camara"/>
         android:layout_below="@+id/scrollView"
         android:background="#0E5ACC"
         android:textColor="#fff"
+        android:onClick="uploadImage"
         android:text="SUBIR IMAGENES"/>
 
     <ImageView
